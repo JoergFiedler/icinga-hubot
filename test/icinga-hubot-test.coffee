@@ -13,12 +13,6 @@ describe 'icinga-hubot', ->
         post: sinon.spy()
     require('../src/icinga-hubot')(@robot)
 
-  it 'registers a respond listener', ->
-    expect(@robot.respond).to.have.been.calledWith(/hello/, sinon.match.any)
-
-  it 'registers a hear listener', ->
-    expect(@robot.hear).to.have.been.calledWith(/orly/, sinon.match.any)
-
   it 'listens to post requests on path "/hubot/icinga-hubot/notify"', ->
     expect(@robot.router.post).to.have.been.calledWith('/hubot/icinga-hubot/notify', sinon.match.any)
 
