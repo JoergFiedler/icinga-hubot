@@ -18,9 +18,8 @@ IcingaNotification = require './icinga_notification'
 MessageCreator = require './message_creator'
 messageCreator = new MessageCreator()
 
-module.exports = (robot) ->
+module.exports = (robot, messageCreator) ->
   robot.router.post '/hubot/icinga-hubot/notify', (req, res) ->
-    icingaData = req.body
     icingaNotification = new IcingaNotification(req.body)
 
     res.statusCode = 201
