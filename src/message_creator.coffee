@@ -1,24 +1,31 @@
+hostStates =
+  0: "Up. Nothing to worry about. As you are!"
+  1: "Host down! Host down! Host down! .. Panic"
+  2: 'Not reachable, I really do not haven any glue where it might be gone.'
+
+serviceStates =
+  0: "Ok, providing it's service as expected."
+  1: "Warn, someone should take a look at it, I guess!"
+  2: "Critical, we are in troubles Sir! Fix it!"
+  3: "Unknown, actually I don't know how it's behaving. Check for yourself."
+
 class MessageCreator
 
   _createHostStateChangedMessage: (notification) ->
-    return "'#{notification.hostname}' changed it's state
-                to '#{notification.hostState}'
-                was '#{notification.lastHostState}'"
+    return "'#{notification.hostname()}' - '#{hostStates[notification.hostState()]}"
 
   _createServiceStateChangedMessage: (notification) ->
-    return "#{notification.serviceDescription} on '#{notification.hostname} changed it's state'
-                    to '#{notification.lastServiceState}'
-                    was '#{notification.serviceState}'"
+    return "#{notification.serviceDescription()} on '#{notification.hostname()} - '#{serviceStates[notification.serviceState()]}"
 
-  message: (notification) ->
-    message = ''
+  messages: (notification) ->
+    messages = []
     if notification.hostStateChanged()
-      message += @_createHostStateChangedMessage(notification)
+      messages.push(@_createHostStateChangedMessage(notification))
     if notification.serviceStateChanged()
-      message += @_createServiceStateChangedMessage(notification)
-    if not message
-      message += "I don't have any idea how to interpret the stuff Icinga is sending."
+      messages.push(@_createServiceStateChangedMessage(notification))
+    if not messages or messages.length == 0
+      messages.push("Can't make any sense out of the stuff Icinga is sending.")
 
-    return message
+    return messages
 
 module.exports = MessageCreator

@@ -11,8 +11,11 @@ describe 'icinga-hubot', ->
       hear: sinon.spy()
       router:
         post: sinon.spy()
+    @messageCreator =
+      messages: sinon.stub()
+    @messageCreator.messages.returns(['any message'])
 
-    require('../src/icinga-hubot')(@robot)
+    require('../src/icinga-hubot')(@robot, @messageCreator)
 
   it 'registers a respond listener', ->
     expect(@robot.respond).to.have.been.calledWith(/hello/, sinon.match.any)
@@ -43,3 +46,6 @@ describe 'icinga-hubot', ->
     it 'sets "envelope.room" using "ICINGA_CONTACTADDRESS0" from post', ->
       expectedEnvelope = room : 'any_contact_address'
       expect(@robot.send).to.have.been.calledWith(expectedEnvelope, sinon.match.any)
+
+    it 'sends the messages created by message creator', ->
+      expect(@robot.send).to.have.been.calledWith(sinon.match.any, 'any message')
