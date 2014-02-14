@@ -14,17 +14,22 @@
 # Author:
 #   Joerg Fiedler[@<org>]
 
+IcingaNotification = require './icinga_notification'
+MessageCreator = require './message_creator'
+messageCreator = new MessageCreator()
+
 module.exports = (robot) ->
   robot.router.post '/hubot/icinga-hubot/notify', (req, res) ->
-    data = req.body
+    icingaData = req.body
+    icingaNotification = new IcingaNotification(req.body)
 
     res.statusCode = 201
     res.end()
 
     envelope = {}
-    envelope.room = data.ICINGA_CONTACTADDRESS0
+    envelope.room = icingaNotification.ircChannel()
 
-    robot.send envelope, JSON.stringify(data)
+    robot.send envelope, messageCreator.message(icingaNotification)
 
   robot.respond /hello/, (msg) ->
     msg.reply "hello!"

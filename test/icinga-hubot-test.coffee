@@ -43,7 +43,3 @@ describe 'icinga-hubot', ->
     it 'sets "envelope.room" using "ICINGA_CONTACTADDRESS0" from post', ->
       expectedEnvelope = room : 'any_contact_address'
       expect(@robot.send).to.have.been.calledWith(expectedEnvelope, sinon.match.any)
-
-    it 'sends post data as JSON string', ->
-      expect(@robot.send).to.have.been.calledWith(sinon.match.any, JSON.stringify(@request.body))
-
