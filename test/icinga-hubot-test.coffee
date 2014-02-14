@@ -11,11 +11,7 @@ describe 'icinga-hubot', ->
       hear: sinon.spy()
       router:
         post: sinon.spy()
-    @messageCreator =
-      messages: sinon.stub()
-    @messageCreator.messages.returns(['any message'])
-
-    require('../src/icinga-hubot')(@robot, @messageCreator)
+    require('../src/icinga-hubot')(@robot)
 
   it 'registers a respond listener', ->
     expect(@robot.respond).to.have.been.calledWith(/hello/, sinon.match.any)
@@ -48,4 +44,4 @@ describe 'icinga-hubot', ->
       expect(@robot.send).to.have.been.calledWith(expectedEnvelope, sinon.match.any)
 
     it 'sends the messages created by message creator', ->
-      expect(@robot.send).to.have.been.calledWith(sinon.match.any, 'any message')
+      expect(@robot.send).to.have.been.calledWith(sinon.match.any, "Can't make any sense out of the stuff Icinga is sending.")
