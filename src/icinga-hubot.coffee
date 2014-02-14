@@ -21,9 +21,3 @@ module.exports = (robot) ->
     messages = messageCreator.messages(icingaNotification)
     for message in messages
       robot.send envelope, message
-
-  robot.respond /hello/, (msg) ->
-    msg.reply "hello!"
-
-  robot.hear /orly/, ->
-    msg.send "yarly"
