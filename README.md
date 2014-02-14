@@ -3,7 +3,7 @@
 
 A hubot script that takes notification messages from Icinga and post them to any IRC channel.
 
-See [`src/icinga-hubot-test.coffee`](src/icinga-hubot-test.coffee) for full documentation.
+See [`src/icinga-hubot.coffee`](src/icinga-hubot.coffee) for full documentation.
 
 ## Installation
 
