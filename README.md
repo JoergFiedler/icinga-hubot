@@ -1,4 +1,5 @@
 # Hubot: icinga-hubot-script
+[![Build Status](https://travis-ci.org/JoergFiedler/icinga-hubot.png?branch=master)](https://travis-ci.org/JoergFiedler/icinga-hubot)
 
 A hubot script that takes notification messages from Icinga and post them to any IRC channel.
 
