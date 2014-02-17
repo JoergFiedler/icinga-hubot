@@ -12,6 +12,10 @@ describe 'MessageCreator', ->
     @icingaNotification =
       hostname: ->
         return 'any hostname'
+      hostIsStillFailing: ->
+        return false
+      serviceIsStillFailing: ->
+        return false
       hostStateChanged: ->
         return false
       serviceStateChanged: ->
@@ -25,7 +29,7 @@ describe 'MessageCreator', ->
 
   describe 'messages()', ->
     describe 'neither host or service state have changed', ->
-      it 'create exaxtly one message', ->
+      it 'create exactly one message', ->
         expect(@messageCreator.messages(@icingaNotification)).to.have.length(1)
 
     describe 'host state has changed', ->

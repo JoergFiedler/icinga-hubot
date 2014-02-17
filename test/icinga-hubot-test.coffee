@@ -38,4 +38,4 @@ describe 'icinga-hubot', ->
       expect(@robot.send).to.have.been.calledWith(expectedEnvelope, sinon.match.any)
 
     it 'sends the messages created by message creator', ->
-      expect(@robot.send).to.have.been.calledWith(sinon.match.any, "Can't make any sense out of the stuff Icinga is sending.")
+      expect(@robot.send).to.have.been.calledWith(sinon.match.any, sinon.match.any)

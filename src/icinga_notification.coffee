@@ -43,4 +43,12 @@ class IcingaNotification
     return !!@icingaData &&
     (@icingaData[icingaVariables.serviceStateId] != @icingaData[icingaVariables.serviceLastStateId])
 
+  serviceIsStillFailing: ->
+    @icingaData[icingaVariables.serviceStateId] != 0 &&
+    (@icingaData[icingaVariables.serviceStateId] == @icingaData[icingaVariables.serviceLastStateId])
+
+  hostIsStillFailing: ->
+    @icingaData[icingaVariables.hostStateId] != 0 &&
+    (@icingaData[icingaVariables.hostStateId] == @icingaData[icingaVariables.hostStateId])
+
 module.exports = IcingaNotification
