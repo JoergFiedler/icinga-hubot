@@ -15,7 +15,7 @@ class MessageCreator
     return "'#{notification.hostname()}' - #{hostStates[notification.hostState()]}"
 
   _createServiceStateChangedMessage: (notification) ->
-    return "#{notification.serviceDescription()} on '#{notification.hostname()}' - #{serviceStates[notification.serviceState()]}"
+    return "'#{notification.serviceDescription()}' on '#{notification.hostname()}' - #{serviceStates[notification.serviceState()]}"
 
   _createStillFailingMessage: (info) ->
     return "#{info} Really guys. At least one of you should take care of it."
