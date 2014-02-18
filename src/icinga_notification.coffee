@@ -3,12 +3,14 @@ icingaVariables =
   hostname: 'ICINGA_HOSTDISPLAYNAME'
   hostOutput: 'ICINGA_HOSTOUTPUT'
   hostStateId: 'ICINGA_HOSTSTATEID'
-  hostLastStateId: 'ICINGA_LASTHOSTSTATEID'
   serviceOutput: 'ICINGA_SERVICEOUTPUT'
   serviceDescription: 'ICINGA_SERVICEDESC'
   serviceDescriptionLong: 'ICINGA__SERVICEDESCRIPTION'
   serviceStateId: 'ICINGA_SERVICESTATEID'
-  serviceLastStateId: 'ICINGA_LASTSERVICESTATEID'
+  serviceProblemId: 'ICINGA_SERVICEPROBLEMID'
+  lastServiceProblemId: 'ICINGA_LASTSERVICEPROBLEMID'
+  hostProblemId: 'ICINGA_HOSTPROBLEMID'
+  lastHostProblemId: 'ICINGA_LASTHOSTPROBLEMID'
 
 class IcingaNotification
   constructor: (icingaData) ->
@@ -37,18 +39,10 @@ class IcingaNotification
 
   hostStateChanged: ->
     return !!@icingaData &&
-    (@icingaData[icingaVariables.hostStateId] != @icingaData[icingaVariables.hostLastStateId])
+    (@icingaData[icingaVariables.hostProblemId] != @icingaData[icingaVariables.lastHostProblemId])
 
   serviceStateChanged: ->
     return !!@icingaData &&
-    (@icingaData[icingaVariables.serviceStateId] != @icingaData[icingaVariables.serviceLastStateId])
-
-  serviceIsStillFailing: ->
-    @icingaData[icingaVariables.serviceStateId] != '0' &&
-    (@icingaData[icingaVariables.serviceStateId] == @icingaData[icingaVariables.serviceLastStateId])
-
-  hostIsStillFailing: ->
-    @icingaData[icingaVariables.hostStateId] != '0' &&
-    (@icingaData[icingaVariables.hostStateId] == @icingaData[icingaVariables.hostStateId])
+    (@icingaData[icingaVariables.serviceProblemId] != @icingaData[icingaVariables.lastServiceProblemId])
 
 module.exports = IcingaNotification

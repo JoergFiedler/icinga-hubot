@@ -17,21 +17,12 @@ class MessageCreator
   _createServiceStateChangedMessage: (notification) ->
     return "'#{notification.serviceDescription()}' on '#{notification.hostname()}' - #{serviceStates[notification.serviceState()]}"
 
-  _createStillFailingMessage: (info) ->
-    return "#{info} Really guys. At least one of you should take care of it."
-
   messages: (notification) ->
     messages = []
     if notification.hostStateChanged()
       messages.push(@_createHostStateChangedMessage(notification))
     else if notification.serviceStateChanged()
       messages.push(@_createServiceStateChangedMessage(notification))
-    else if notification.hostIsStillFailing()
-      messages.push(@_createStillFailingMessage(
-        "'#{notification.hostname()}' still has problems."))
-    else if notification.serviceIsStillFailing()
-      messages.push(@_createStillFailingMessage(
-        "'#{notification.serviceDescription()}' on '#{notification.hostname()}' still has problems."))
 
     if not messages or messages.length == 0
       messages.push("Can't make any sense out of the stuff Icinga is sending.")

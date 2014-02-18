@@ -27,14 +27,14 @@ describe 'IcingaNotification', ->
 
     it 'returns "true" if state and last state do not match', ->
       icingaData =
-        ICINGA_LASTHOSTSTATEID: '1'
+        ICINGA_HOSTPROBLEMID: 1
 
       expect(new IcingaNotification(icingaData).hostStateChanged()).to.equal(true)
 
     it 'returns "false" if state and last state do match', ->
       icingaData =
-        ICINGA_LASTHOSTSTATEID: '1'
-        ICINGA_HOSTSTATEID: '1'
+        ICINGA_LASTHOSTPROBLEMID: 1
+        ICINGA_HOSTPROBLEMID: 1
 
       expect(new IcingaNotification(icingaData).hostStateChanged()).to.equal(false)
 
@@ -44,13 +44,13 @@ describe 'IcingaNotification', ->
 
     it 'returns "true" if state and last state do not match', ->
       icingaData =
-        ICINGA_LASTSERVICESTATEID: '1'
+        ICINGA_LASTSERVICEPROBLEMID: 1
 
       expect(new IcingaNotification(icingaData).serviceStateChanged()).to.equal(true)
 
     it 'returns "false" if state and last state do match', ->
       icingaData =
-        ICINGA_LASTSERVICESTATEID: '1'
-        ICINGA_SERVICESTATEID: '1'
+        ICINGA_LASTSERVICEPROBLEMID: 1
+        ICINGA_SERVICEPROBLEMID: 1
 
       expect(new IcingaNotification(icingaData).serviceStateChanged()).to.equal(false)
