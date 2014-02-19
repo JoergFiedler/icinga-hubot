@@ -1,31 +1,39 @@
 hostStates =
-  0: "Up. Nothing to worry about. As you are!"
+  0: "Up and running. Nothing to worry about."
   1: "Host down! Host down! Host down! .. Panic"
-  2: 'Not reachable, I really do not haven any glue where it might be gone.'
+  2: 'Not reachable, I really do not have any idea where it might be gone.'
 
 serviceStates =
-  0: "Ok, providing it's service as expected."
-  1: "Warn, someone should take a look at it, I guess!"
+  0: "Ok, working as expected."
+  1: "Warn, I guess someone should take a look at it!"
   2: "Critical, we are in troubles Sir! Fix it!"
   3: "Unknown, actually I don't know how it's behaving. Check for yourself."
 
+problemMessage = "Houston, we've had a problem."
+recoverMessage = "Problem solved. As you are!"
+
 class MessageCreator
 
-  _createHostStateChangedMessage: (notification) ->
-    return "'#{notification.hostname()}' - #{hostStates[notification.hostState()]}"
+  _createHostStateChangedMessage: (message, notification) ->
+    return "#{message} '#{notification.hostname()}': #{hostStates[notification.hostState()]}"
 
-  _createServiceStateChangedMessage: (notification) ->
-    return "'#{notification.serviceDescription()}' on '#{notification.hostname()}' - #{serviceStates[notification.serviceState()]}"
+  _createServiceStateChangedMessage: (message, notification) ->
+    return "#{message} '#{notification.serviceDescription()}' on '#{notification.hostname()}': #{serviceStates[notification.serviceState()]}"
 
   messages: (notification) ->
     messages = []
-    if notification.hostStateChanged()
-      messages.push(@_createHostStateChangedMessage(notification))
-    else if notification.serviceStateChanged()
-      messages.push(@_createServiceStateChangedMessage(notification))
 
-    if not messages or messages.length == 0
-      messages.push("Can't make any sense out of the stuff Icinga is sending.")
+    if notification.isProblem()
+      statusMessage = problemMessage
+    else if notification.isRecovery()
+      statusMessage = recoverMessage
+    else
+      statusMessage = 'Unknown Icinga notification type.'
+
+    if notification.isHostNotification()
+      messages.push(@_createHostStateChangedMessage(statusMessage, notification))
+    else
+      messages.push(@_createServiceStateChangedMessage(statusMessage, notification))
 
     return messages
 

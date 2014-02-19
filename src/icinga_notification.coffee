@@ -11,6 +11,7 @@ icingaVariables =
   lastServiceProblemId: 'ICINGA_LASTSERVICEPROBLEMID'
   hostProblemId: 'ICINGA_HOSTPROBLEMID'
   lastHostProblemId: 'ICINGA_LASTHOSTPROBLEMID'
+  notificationType: 'ICINGA_NOTIFICATIONTYPE'
 
 class IcingaNotification
   constructor: (icingaData) ->
@@ -25,24 +26,22 @@ class IcingaNotification
   serviceDescription: ->
     return @icingaData[icingaVariables.serviceDescription]
 
+  isProblem: ->
+    return @icingaData[icingaVariables.notificationType] == 'PROBLEM'
+
+  isRecovery: ->
+    return @icingaData[icingaVariables.notificationType] == 'RECOVERY'
+
   hostState: ->
     return @icingaData[icingaVariables.hostStateId]
 
-  lastHostState: ->
-    return @icingaData[icingaVariables.hostLastStateId]
+  isServiceNotification: ->
+    return !!@icingaData[icingaVariables.serviceProblemId] || !!@icingaData[icingaVariables.lastServiceProblemId]
+
+  isHostNotification: ->
+    return !@isServiceNotification()
 
   serviceState: ->
     return @icingaData[icingaVariables.serviceStateId]
-
-  lastServiceState: ->
-    return @icingaData[icingaVariables.serviceLastStateId]
-
-  hostStateChanged: ->
-    return !!@icingaData &&
-    (@icingaData[icingaVariables.hostProblemId] != @icingaData[icingaVariables.lastHostProblemId])
-
-  serviceStateChanged: ->
-    return !!@icingaData &&
-    (@icingaData[icingaVariables.serviceProblemId] != @icingaData[icingaVariables.lastServiceProblemId])
 
 module.exports = IcingaNotification

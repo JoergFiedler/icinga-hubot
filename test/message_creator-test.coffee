@@ -12,47 +12,54 @@ describe 'MessageCreator', ->
     @icingaNotification =
       hostname: ->
         return 'any hostname'
-      hostIsStillFailing: ->
-        return false
-      serviceIsStillFailing: ->
-        return false
-      hostStateChanged: ->
-        return false
-      serviceStateChanged: ->
-        return false
       hostState: ->
-        return 0
+        return 1
       serviceState: ->
-        return 0
+        return 2
       serviceDescription: ->
         return 'service description'
+      isHostNotification: ->
+        return false
+      isServiceNotification: ->
+        return false
+      isProblem: ->
+        return false
+      isRecovery: ->
+        return false
 
   describe 'messages()', ->
-    describe 'neither host or service state have changed', ->
-      it 'create exactly one message', ->
-        expect(@messageCreator.messages(@icingaNotification)).to.have.length(1)
-
-    describe 'host state has changed', ->
+    describe 'isProblem', ->
       beforeEach ->
-        @icingaNotification.hostStateChanged = ->
+        @icingaNotification.isProblem = ->
           return true
 
-      it 'creates exactly one message', ->
-        expect(@messageCreator.messages(@icingaNotification)).to.have.length(1)
+      it 'message should contain problem message', ->
+        expect(@messageCreator.messages(@icingaNotification)).to.match(/Houston/)
 
-      it 'creates a message that contains the hostname', ->
-        expect(@messageCreator.messages(@icingaNotification)[0]).to.match(/hostname/)
+      it 'message should contains the hostname if it is a host notification', ->
+        @icingaNotification.isHostNotification = ->
+          return true
+        expect(@messageCreator.messages(@icingaNotification)).to.match(/any hostname/)
 
-    describe 'service state has changed', ->
+      it 'message should contains the service name if it is a service notification', ->
+        @icingaNotification.isServiceNotification = ->
+          return true
+        expect(@messageCreator.messages(@icingaNotification)).to.match(/service description/)
+
+    describe 'isRecovery', ->
       beforeEach ->
-        @icingaNotification.serviceStateChanged = ->
+        @icingaNotification.isRecovery = ->
           return true
 
-      it 'creates exactly one message', ->
-        expect(@messageCreator.messages(@icingaNotification)).to.have.length(1)
+      it 'message should contain problem message', ->
+        expect(@messageCreator.messages(@icingaNotification)).to.match(/Problem solved/)
 
-      it 'creates a message that contains the hostname', ->
-        expect(@messageCreator.messages(@icingaNotification)[0]).to.match(/hostname/)
+      it 'message should contains the hostname if it is a host notification', ->
+        @icingaNotification.isHostNotification = ->
+          return true
+        expect(@messageCreator.messages(@icingaNotification)).to.match(/any hostname/)
 
-      it 'creates a message that contains the service dsscription', ->
-        expect(@messageCreator.messages(@icingaNotification)[0]).to.match(/service description/)
+      it 'message should contains the service name if it is a service notification', ->
+        @icingaNotification.isServiceNotification = ->
+          return true
+        expect(@messageCreator.messages(@icingaNotification)).to.match(/service description/)
