@@ -4,14 +4,14 @@
 # Author:
 #   Joerg Fiedler
 
-isDebugEnabled = process.env.HUBOT_DEBUG
+logLevel = process.env.HUBOT_LOG_LEVEL
 IcingaNotification = require './icinga_notification'
 MessageCreator = require './message_creator'
 messageCreator = new MessageCreator()
 
 module.exports = (robot) ->
   robot.router.post '/hubot/icinga-hubot/notify', (req, res) ->
-    if isDebugEnabled
+    if logLevel && logLevel.match(/debug/i)
       console.log(req.body)
 
     icingaNotification = new IcingaNotification(req.body)
