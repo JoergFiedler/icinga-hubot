@@ -26,9 +26,13 @@ describe 'MessageCreator', ->
         return false
       isRecovery: ->
         return false
+      hostNotesUrl: ->
+        return ''
+      serviceNotesUrl: ->
+        return ''
 
   describe 'messages()', ->
-    describe 'isProblem', ->
+    describe 'is a problem', ->
       beforeEach ->
         @icingaNotification.isProblem = ->
           return true
@@ -36,15 +40,31 @@ describe 'MessageCreator', ->
       it 'message should contain problem message', ->
         expect(@messageCreator.messages(@icingaNotification)).to.match(/Houston/)
 
-      it 'message should contains the hostname if it is a host notification', ->
-        @icingaNotification.isHostNotification = ->
-          return true
-        expect(@messageCreator.messages(@icingaNotification)).to.match(/any hostname/)
+      describe 'is a host notification', ->
+        beforeEach ->
+          @icingaNotification.isHostNotification = ->
+            return true
+          @icingaNotification.hostNotesUrl = ->
+            return 'any_host_notes_url'
 
-      it 'message should contains the service name if it is a service notification', ->
-        @icingaNotification.isServiceNotification = ->
-          return true
-        expect(@messageCreator.messages(@icingaNotification)).to.match(/service description/)
+        it 'message contains the hostname if it is a host notification', ->
+          expect(@messageCreator.messages(@icingaNotification)).to.match(/any hostname/)
+
+        it 'message contains host service url', ->
+          expect(@messageCreator.messages(@icingaNotification)).to.match(/any_host_notes_url/)
+
+      describe 'is a service notification', ->
+        beforeEach ->
+          @icingaNotification.isServiceNotification = ->
+            return true
+          @icingaNotification.serviceNotesUrl = ->
+            return 'any_service_notes_url'
+
+        it 'message contains the service name if it is a service notification', ->
+          expect(@messageCreator.messages(@icingaNotification)).to.match(/service description/)
+
+        it 'message contains the service notes url', ->
+          expect(@messageCreator.messages(@icingaNotification)).to.match(/any_service_notes_url/)
 
     describe 'isRecovery', ->
       beforeEach ->

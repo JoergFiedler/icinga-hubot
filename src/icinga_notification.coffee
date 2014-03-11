@@ -12,6 +12,8 @@ icingaVariables =
   hostProblemId: 'ICINGA_HOSTPROBLEMID'
   lastHostProblemId: 'ICINGA_LASTHOSTPROBLEMID'
   notificationType: 'ICINGA_NOTIFICATIONTYPE'
+  hostNotesUrl: 'ICINGA_HOSTNOTESURL'
+  serviceNotesUrl: 'ICINGA_SERVICENOTESURL'
 
 class IcingaNotification
   constructor: (icingaData) ->
@@ -43,5 +45,11 @@ class IcingaNotification
 
   serviceState: ->
     return @icingaData[icingaVariables.serviceStateId]
+
+  hostNotesUrl: ->
+    return @icingaData[icingaVariables.hostNotesUrl]
+
+  serviceNotesUrl: ->
+    return @icingaData[icingaVariables.serviceNotesUrl]
 
 module.exports = IcingaNotification

@@ -32,8 +32,10 @@ class MessageCreator
 
     if notification.isHostNotification()
       messages.push(@_createHostStateChangedMessage(statusMessage, notification))
+      messages.push("#{notification.hostNotesUrl()}")
     else
       messages.push(@_createServiceStateChangedMessage(statusMessage, notification))
+      messages.push("#{notification.serviceNotesUrl()}")
 
     return messages
 

@@ -19,5 +19,4 @@ module.exports = (robot) ->
     envelope.room = icingaNotification.ircChannel()
 
     messages = messageCreator.messages(icingaNotification)
-    for message in messages
-      robot.send envelope, message
+    robot.send envelope, messages.join(' ')
