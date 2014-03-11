@@ -4,12 +4,16 @@
 # Author:
 #   Joerg Fiedler
 
+isDebugEnabled = process.env.HUBOT_DEBUG
 IcingaNotification = require './icinga_notification'
 MessageCreator = require './message_creator'
 messageCreator = new MessageCreator()
 
 module.exports = (robot) ->
   robot.router.post '/hubot/icinga-hubot/notify', (req, res) ->
+    if isDebugEnabled
+      console.log(req.body)
+
     icingaNotification = new IcingaNotification(req.body)
 
     res.statusCode = 201
