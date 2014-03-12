@@ -32,16 +32,22 @@ class MessageCreator
     return "'#{notification.serviceDescription()}' on '#{notification.hostname()}':" +
     "#{serviceStates[notification.serviceState()]}"
 
+  _problemDescription: (notification) ->
+    if notification.isHostNotification()
+      return @_createHostStateChangedMessage(notification)
+    else
+      return @_createServiceStateChangedMessage(notification)
+
   _addStateChangedMessage: (messages, notification) ->
     if notification.isHostNotification()
       messages.push @_createHostStateChangedMessage(notification)
-      messages.push "#{notification.hostNotesUrl()}"
+      messages.push "#{notification.hostNotesUrl()}" if notification.hostNotesUrl()
     else if notification.isServiceNotification()
       messages.push @_createServiceStateChangedMessage(notification)
-      messages.push "#{notification.serviceNotesUrl()}"
+      messages.push "#{notification.serviceNotesUrl()}" if notification.serviceNotesUrl()
     else
       messages.push "It's not a host and it's also not a service. So, what could it possibly be." +
-      "I really don't know and I have to tell ya' I really don't care!"
+                    "I really don't know and I have to tell ya' I really don't care!"
 
   messages: (notification) ->
     messages = []
@@ -54,9 +60,9 @@ class MessageCreator
       @_addStateChangedMessage(messages, notification)
     else if notification.isAcknowledgement()
       template = @_random(acknowledgeMessages)
-      messages.push template.replace(/%MESSAGE%/, 'message')
-                            .replace(/%USER%/, 'user')
-                            .replace(/%PROBLEM%/, 'problem')
+      messages.push template.replace(/%MESSAGE%/, notification.comment())
+                    .replace(/%USER%/, notification.author())
+                    .replace(/%PROBLEM%/, @_problemDescription(notification))
     else
       messages.push 'Unknown Icinga notification type.'
 

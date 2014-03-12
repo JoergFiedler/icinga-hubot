@@ -14,6 +14,8 @@ icingaVariables =
   notificationType: 'ICINGA_NOTIFICATIONTYPE'
   hostNotesUrl: 'ICINGA_HOSTNOTESURL'
   serviceNotesUrl: 'ICINGA_SERVICENOTESURL'
+  notificationAuthor: 'ICINGA_NOTIFICATIONAUTHOR'
+  notificationComment: 'ICINGA_NOTIFICATIONCOMMENT'
 
 class IcingaNotification
   constructor: (icingaData) ->
@@ -54,5 +56,11 @@ class IcingaNotification
 
   isAcknowledgement: ->
     return @icingaData[icingaVariables.notificationType] == 'ACKNOWLEDGEMENT'
+
+  author: ->
+    return @icingaData[icingaVariables.notificationAuthor]
+
+  comment: ->
+    return @icingaData[icingaVariables.notificationComment]
 
 module.exports = IcingaNotification

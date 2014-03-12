@@ -30,6 +30,10 @@ describe 'MessageCreator', ->
         return ''
       serviceNotesUrl: ->
         return ''
+      comment: ->
+        return 'comment'
+      author: ->
+        return 'author'
 
   describe 'messages()', ->
     describe 'is a problem', ->
@@ -38,7 +42,7 @@ describe 'MessageCreator', ->
           return true
 
       it 'message should contain problem message', ->
-        expect(@messageCreator.messages(@icingaNotification)).to.match(/Houston/)
+        expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/Houston/)
 
       describe 'is a host notification', ->
         beforeEach ->
@@ -48,10 +52,16 @@ describe 'MessageCreator', ->
             return 'any_host_notes_url'
 
         it 'message contains the hostname if it is a host notification', ->
-          expect(@messageCreator.messages(@icingaNotification)).to.match(/any hostname/)
+          expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/any hostname/)
 
         it 'message contains host service url', ->
-          expect(@messageCreator.messages(@icingaNotification)).to.match(/any_host_notes_url/)
+          expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/any_host_notes_url/)
+
+        it 'message does not contain host service url, if it is not provided by icinga', ->
+          @icingaNotification.hostNotesUrl = ->
+            return undefined
+
+          expect(@messageCreator.messages(@icingaNotification).join(' ')).to.not.match(/undefined/)
 
       describe 'is a service notification', ->
         beforeEach ->
@@ -61,10 +71,15 @@ describe 'MessageCreator', ->
             return 'any_service_notes_url'
 
         it 'message contains the service name if it is a service notification', ->
-          expect(@messageCreator.messages(@icingaNotification)).to.match(/service description/)
+          expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/service description/)
 
         it 'message contains the service notes url', ->
-          expect(@messageCreator.messages(@icingaNotification)).to.match(/any_service_notes_url/)
+          expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/any_service_notes_url/)
+
+        it 'message does not contain the service notes url, if it is not provided by icinga', ->
+          @icingaNotification.serviceNotesUrl = ->
+            return undefined
+          expect(@messageCreator.messages(@icingaNotification).join(' ')).to.not.match(/undefined/)
 
     describe 'isRecovery', ->
       beforeEach ->
@@ -72,17 +87,17 @@ describe 'MessageCreator', ->
           return true
 
       it 'message should contain problem message', ->
-        expect(@messageCreator.messages(@icingaNotification)).to.match(/Problem solved/)
+        expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/Problem solved/)
 
       it 'message should contains the hostname if it is a host notification', ->
         @icingaNotification.isHostNotification = ->
           return true
-        expect(@messageCreator.messages(@icingaNotification)).to.match(/any hostname/)
+        expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/any hostname/)
 
       it 'message should contains the service name if it is a service notification', ->
         @icingaNotification.isServiceNotification = ->
           return true
-        expect(@messageCreator.messages(@icingaNotification)).to.match(/service description/)
+        expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/service description/)
 
     describe 'isAcknowledgement', ->
       beforeEach ->
@@ -90,10 +105,10 @@ describe 'MessageCreator', ->
           return true
 
       it 'message should contains the user who takes care of a problem', ->
-        expect(@messageCreator.messages(@icingaNotification)).to.match(/user/)
+        expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/author/)
 
       it 'message should contain the problem which is taken care of', ->
-        expect(@messageCreator.messages(@icingaNotification)).to.match(/problem/)
+        expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/Critical/)
 
       it 'message should contains the message the user left behind', ->
-        expect(@messageCreator.messages(@icingaNotification)).to.match(/message/)
+        expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/comment/)
