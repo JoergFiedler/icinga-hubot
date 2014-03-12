@@ -11,8 +11,8 @@ serviceStates =
 
 acknowledgeMessages = [
   "Finally, someone feels reponsible for error: '%PROBLEM%'. %USER% " +
-  "took care of it. The message she left: '%MESSAGE%.",
-  "What a boy! '%USER%' is bothered by '%PROBLEM%' and takes care of it. I was " +
+  "takes care of it and left a message: '%MESSAGE%.",
+  "Follow the hero! '%USER%' got bothered by '%PROBLEM%' and takes care of it. I was " +
   "asked to relay the following message for you: '%MESSAGE%'"
 ]
 
