@@ -27,16 +27,16 @@ class MessageCreator
 
   _createDowntimeStartMessage: (notification) ->
     if notification.isHostNotification
-      return "Downtime started for host #{notification.hostname}. Seems like a good time to go for a cup of coffee."
+      return "Downtime started for host #{notification.hostname()}. Seems like a good time to go for a cup of coffee."
     else
-      return "Downtime started for service #{notification.serviceDescription()} on host #{notification.hostname}. " +
+      return "Downtime started for service #{notification.serviceDescription()} on host #{notification.hostname()}. " +
       "Seems like a good time to go for a cup of coffee."
 
   _createDowntimeCancelledMessage: (notification) ->
     if notification.isHostNotification
-      return "Downtime cancelled for host #{notification.hostname}. Back to work guys"
+      return "Downtime cancelled for host #{notification.hostname()}. Back to work guys"
     else
-      return "Downtime cancelled for service #{notification.serviceDescription()} on host #{notification.hostname}. " +
+      return "Downtime cancelled for service #{notification.serviceDescription()} on host #{notification.hostname()}. " +
       "Back to work guys"
 
   _createHostStateChangedMessage: (notification) ->
