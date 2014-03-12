@@ -55,10 +55,9 @@ class MessageCreator
   _addStateChangedMessage: (messages, notification) ->
     if notification.isHostNotification()
       messages.push @_createHostStateChangedMessage(notification)
-      messages.push encodeURI(notification.hostActionUrl()) if notification.hostActionUrl()
     else if notification.isServiceNotification()
       messages.push @_createServiceStateChangedMessage(notification)
-      messages.push encodeURI(notification.serviceActionUrl()) if notification.serviceActionUrl()
+      messages.push encodeURI("#{notification.serviceActionUrl()}&from=-1h&width=1024&height=800") if notification.serviceActionUrl()
     else
       messages.push "It's not a host and it's also not a service. So, what could it possibly be." +
                     "I really don't know and I have to tell ya' I really don't care!"

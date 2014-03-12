@@ -60,15 +60,6 @@ describe 'MessageCreator', ->
         it 'message contains the hostname if it is a host notification', ->
           expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/any hostname/)
 
-        it 'message contains host service url', ->
-          expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/any_host_notes_url/)
-
-        it 'message does not contain host service url, if it is not provided by icinga', ->
-          @icingaNotification.hostActionUrl = ->
-            return undefined
-
-          expect(@messageCreator.messages(@icingaNotification).join(' ')).to.not.match(/undefined/)
-
       describe 'is a service notification', ->
         beforeEach ->
           @icingaNotification.isServiceNotification = ->
