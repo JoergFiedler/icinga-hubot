@@ -26,9 +26,9 @@ describe 'MessageCreator', ->
         return false
       isRecovery: ->
         return false
-      hostNotesUrl: ->
+      hostActionUrl: ->
         return ''
-      serviceNotesUrl: ->
+      serviceActionUrl: ->
         return ''
       comment: ->
         return 'comment'
@@ -48,7 +48,7 @@ describe 'MessageCreator', ->
         beforeEach ->
           @icingaNotification.isHostNotification = ->
             return true
-          @icingaNotification.hostNotesUrl = ->
+          @icingaNotification.hostActionUrl = ->
             return 'any_host_notes_url'
 
         it 'message contains the hostname if it is a host notification', ->
@@ -58,7 +58,7 @@ describe 'MessageCreator', ->
           expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/any_host_notes_url/)
 
         it 'message does not contain host service url, if it is not provided by icinga', ->
-          @icingaNotification.hostNotesUrl = ->
+          @icingaNotification.hostActionUrl = ->
             return undefined
 
           expect(@messageCreator.messages(@icingaNotification).join(' ')).to.not.match(/undefined/)
@@ -67,7 +67,7 @@ describe 'MessageCreator', ->
         beforeEach ->
           @icingaNotification.isServiceNotification = ->
             return true
-          @icingaNotification.serviceNotesUrl = ->
+          @icingaNotification.serviceActionUrl = ->
             return 'any_service_notes_url'
 
         it 'message contains the service name if it is a service notification', ->
@@ -77,7 +77,7 @@ describe 'MessageCreator', ->
           expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/any_service_notes_url/)
 
         it 'message does not contain the service notes url, if it is not provided by icinga', ->
-          @icingaNotification.serviceNotesUrl = ->
+          @icingaNotification.serviceActionUrl = ->
             return undefined
           expect(@messageCreator.messages(@icingaNotification).join(' ')).to.not.match(/undefined/)
 

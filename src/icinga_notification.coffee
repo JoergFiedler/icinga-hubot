@@ -12,8 +12,8 @@ icingaVariables =
   hostProblemId: 'ICINGA_HOSTPROBLEMID'
   lastHostProblemId: 'ICINGA_LASTHOSTPROBLEMID'
   notificationType: 'ICINGA_NOTIFICATIONTYPE'
-  hostNotesUrl: 'ICINGA_HOSTNOTESURL'
-  serviceNotesUrl: 'ICINGA_SERVICENOTESURL'
+  hostActionUrl: 'ICINGA_HOSTACTIONURL'
+  serviceActionUrl: 'ICINGA_SERVICEACTIONURL'
   notificationAuthor: 'ICINGA_NOTIFICATIONAUTHOR'
   notificationComment: 'ICINGA_NOTIFICATIONCOMMENT'
 
@@ -48,11 +48,11 @@ class IcingaNotification
   serviceState: ->
     return @icingaData[icingaVariables.serviceStateId]
 
-  hostNotesUrl: ->
-    return @icingaData[icingaVariables.hostNotesUrl]
+  hostActionUrl: ->
+    return @icingaData[icingaVariables.hostActionUrl]
 
-  serviceNotesUrl: ->
-    return @icingaData[icingaVariables.serviceNotesUrl]
+  serviceActionUrl: ->
+    return @icingaData[icingaVariables.serviceActionUrl]
 
   isAcknowledgement: ->
     return @icingaData[icingaVariables.notificationType] == 'ACKNOWLEDGEMENT'

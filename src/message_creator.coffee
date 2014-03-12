@@ -10,10 +10,10 @@ serviceStates =
   3: "Unknown, actually I don't know how it's behaving. Check for yourself."
 
 acknowledgeMessages = [
-  "Finally, someone feels reponsible for that error: '%PROBLEM%'. %USER% " +
-  "took care of it and said, I quote: '%MESSAGE%.",
-  "What a boy! %USER% is bothered by '%PROBLEM%'. The message I should " +
-  "relay for you: '%MESSAGE%'"
+  "Finally, someone feels reponsible for error: '%PROBLEM%'. %USER% " +
+  "took care of it. The message she left: '%MESSAGE%.",
+  "What a boy! '%USER%' is bothered by '%PROBLEM%' and takes care of it. I was "  +
+  "asked to relay the following message for you: '%MESSAGE%'"
 ]
 
 problemMessage = "Houston, we've had a problem."
@@ -29,7 +29,7 @@ class MessageCreator
     return "'#{notification.hostname()}': #{hostStates[notification.hostState()]}"
 
   _createServiceStateChangedMessage: (notification) ->
-    return "'#{notification.serviceDescription()}' on '#{notification.hostname()}':" +
+    return "'#{notification.serviceDescription()}' on '#{notification.hostname()}': " +
     "#{serviceStates[notification.serviceState()]}"
 
   _problemDescription: (notification) ->
@@ -41,10 +41,10 @@ class MessageCreator
   _addStateChangedMessage: (messages, notification) ->
     if notification.isHostNotification()
       messages.push @_createHostStateChangedMessage(notification)
-      messages.push "#{notification.hostNotesUrl()}" if notification.hostNotesUrl()
+      messages.push "#{notification.hostActionUrl()}" if notification.hostActionUrl()
     else if notification.isServiceNotification()
       messages.push @_createServiceStateChangedMessage(notification)
-      messages.push "#{notification.serviceNotesUrl()}" if notification.serviceNotesUrl()
+      messages.push "#{notification.serviceActionUrl()}" if notification.serviceActionUrl()
     else
       messages.push "It's not a host and it's also not a service. So, what could it possibly be." +
                     "I really don't know and I have to tell ya' I really don't care!"
@@ -60,8 +60,9 @@ class MessageCreator
       @_addStateChangedMessage(messages, notification)
     else if notification.isAcknowledgement()
       template = @_random(acknowledgeMessages)
-      messages.push template.replace(/%MESSAGE%/, notification.comment())
-                    .replace(/%USER%/, notification.author())
+      messages.push template  \
+                    .replace(/%MESSAGE%/, notification.comment()) \
+                    .replace(/%USER%/, notification.author()) \
                     .replace(/%PROBLEM%/, @_problemDescription(notification))
     else
       messages.push 'Unknown Icinga notification type.'
