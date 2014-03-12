@@ -12,7 +12,7 @@ serviceStates =
 acknowledgeMessages = [
   "Finally, someone feels reponsible for error: '%PROBLEM%'. %USER% " +
   "took care of it. The message she left: '%MESSAGE%.",
-  "What a boy! '%USER%' is bothered by '%PROBLEM%' and takes care of it. I was "  +
+  "What a boy! '%USER%' is bothered by '%PROBLEM%' and takes care of it. I was " +
   "asked to relay the following message for you: '%MESSAGE%'"
 ]
 
@@ -24,6 +24,20 @@ class MessageCreator
   _random: (messages) ->
     selected = Math.floor(Math.random() * messages.length)
     return messages[selected]
+
+  _createDowntimeStartMessage: (notification) ->
+    if notification.isHostNotification
+      return "Downtime started for host #{notification.hostname}. Seems like a good time to go for a cup of coffee."
+    else
+      return "Downtime started for service #{notification.serviceDescription()} on host #{notification.hostname}. " +
+      "Seems like a good time to go for a cup of coffee."
+
+  _createDowntimeCancelledMessage: (notification) ->
+    if notification.isHostNotification
+      return "Downtime cancelled for host #{notification.hostname}. Back to work guys"
+    else
+      return "Downtime cancelled for service #{notification.serviceDescription()} on host #{notification.hostname}. " +
+      "Back to work guys"
 
   _createHostStateChangedMessage: (notification) ->
     return "'#{notification.hostname()}': #{hostStates[notification.hostState()]}"
@@ -58,11 +72,15 @@ class MessageCreator
     else if notification.isRecovery()
       messages.push recoverMessage
       @_addStateChangedMessage(messages, notification)
+    else if notification.isDowntimeStart()
+      messages.push @_createDowntimeStartMessage(notification)
+    else if notification.isDowntimeCancelled()
+      messages.push @_createDowntimeCancelledMessage(notification)
     else if notification.isAcknowledgement()
       template = @_random(acknowledgeMessages)
-      messages.push template  \
-                    .replace(/%MESSAGE%/, notification.comment()) \
-                    .replace(/%USER%/, notification.author()) \
+      messages.push template
+                    .replace(/%MESSAGE%/, notification.comment())
+                    .replace(/%USER%/, notification.author())
                     .replace(/%PROBLEM%/, @_problemDescription(notification))
     else
       messages.push 'Unknown Icinga notification type.'

@@ -34,6 +34,12 @@ describe 'MessageCreator', ->
         return 'comment'
       author: ->
         return 'author'
+      isAcknowledgement: ->
+        return false
+      isDowntimeStart: ->
+        return false
+      isDowntimeCancelled: ->
+        return false
 
   describe 'messages()', ->
     describe 'is a problem', ->
@@ -112,3 +118,21 @@ describe 'MessageCreator', ->
 
       it 'message should contains the message the user left behind', ->
         expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/comment/)
+
+    describe 'isDowntimeStart', ->
+      it 'message contains downtime start string if it is a downtime start icinga notification', ->
+        @icingaNotification.isDowntimeStart = ->
+          return true
+        expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/Downtime started/)
+
+      it 'message does not contain downtime start string if it is not a downtime start icinga notification', ->
+        expect(@messageCreator.messages(@icingaNotification).join(' ')).to.not.match(/Downtime started/)
+
+    describe 'isDowntimeCancelled', ->
+      it 'message contains downtime cancelled string if it is a downtime cancelled icinga notification', ->
+        @icingaNotification.isDowntimeCancelled = ->
+          return true
+        expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/Downtime cancelled/)
+
+      it 'message does not contain downtime cancelled string if it is not a downtime cancelled icinga notification', ->
+        expect(@messageCreator.messages(@icingaNotification).join(' ')).to.not.match(/Downtime cancelled/)

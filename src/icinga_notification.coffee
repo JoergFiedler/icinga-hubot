@@ -33,6 +33,12 @@ class IcingaNotification
   isProblem: ->
     return @icingaData[icingaVariables.notificationType] == 'PROBLEM'
 
+  isDowntimeStart: ->
+    return @icingaData[icingaVariables.notificationType] == 'DOWNTIMESTART'
+
+  isDowntimeCancelled: ->
+    return @icingaData[icingaVariables.notificationType] == 'DOWNTIMECANCELLED'
+
   isRecovery: ->
     return @icingaData[icingaVariables.notificationType] == 'RECOVERY'
 
