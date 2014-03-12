@@ -52,12 +52,13 @@ class MessageCreator
     else
       return @_createServiceStateChangedMessage(notification)
 
-  _addStateChangedMessage: (messages, notification) ->
+  _addStateChangedMessage: (messages, notification, isProblem) ->
     if notification.isHostNotification()
       messages.push @_createHostStateChangedMessage(notification)
     else if notification.isServiceNotification()
       messages.push @_createServiceStateChangedMessage(notification)
-      messages.push encodeURI("#{notification.serviceActionUrl()}&from=-1h&width=1024&height=800") if notification.serviceActionUrl()
+      if isProblem && notification.serviceActionUrl()
+        messages.push encodeURI("#{notification.serviceActionUrl()}&from=-1h&width=1024&height=800")
     else
       messages.push "It's not a host and it's also not a service. So, what could it possibly be." +
                     "I really don't know and I have to tell ya' I really don't care!"
@@ -67,10 +68,10 @@ class MessageCreator
 
     if notification.isProblem()
       messages.push problemMessage
-      @_addStateChangedMessage(messages, notification)
+      @_addStateChangedMessage(messages, notification, true)
     else if notification.isRecovery()
       messages.push recoverMessage
-      @_addStateChangedMessage(messages, notification)
+      @_addStateChangedMessage(messages, notification, false)
     else if notification.isDowntimeStart()
       messages.push @_createDowntimeStartMessage(notification)
     else if notification.isDowntimeCancelled()

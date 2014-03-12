@@ -29,7 +29,7 @@ describe 'MessageCreator', ->
       hostActionUrl: ->
         return ''
       serviceActionUrl: ->
-        return ''
+        return 'service_action_url'
       comment: ->
         return 'comment'
       author: ->
@@ -83,18 +83,23 @@ describe 'MessageCreator', ->
         @icingaNotification.isRecovery = ->
           return true
 
-      it 'message should contain problem message', ->
+      it 'message contain problem message', ->
         expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/Problem solved/)
 
-      it 'message should contains the hostname if it is a host notification', ->
+      it 'message contains the hostname if it is a host notification', ->
         @icingaNotification.isHostNotification = ->
           return true
         expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/any hostname/)
 
-      it 'message should contains the service name if it is a service notification', ->
+      it 'message contains the service name if it is a service notification', ->
         @icingaNotification.isServiceNotification = ->
           return true
         expect(@messageCreator.messages(@icingaNotification).join(' ')).to.match(/service description/)
+
+      it 'message does not contain the service action url', ->
+        @icingaNotification.isServiceNotification = ->
+          return true
+        expect(@messageCreator.messages(@icingaNotification).join(' ')).to.not.match(/service_action_url/)
 
     describe 'isAcknowledgement', ->
       beforeEach ->
