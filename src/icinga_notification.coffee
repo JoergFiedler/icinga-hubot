@@ -52,4 +52,7 @@ class IcingaNotification
   serviceNotesUrl: ->
     return @icingaData[icingaVariables.serviceNotesUrl]
 
+  isAcknowledgement: ->
+    return @icingaData[icingaVariables.notificationType] == 'ACKNOWLEDGEMENT'
+
 module.exports = IcingaNotification

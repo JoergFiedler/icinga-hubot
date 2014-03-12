@@ -9,33 +9,56 @@ serviceStates =
   2: "Critical, we are in troubles Sir! Fix it!"
   3: "Unknown, actually I don't know how it's behaving. Check for yourself."
 
+acknowledgeMessages = [
+  "Finally, someone feels reponsible for that error: '%PROBLEM%'. %USER% " +
+  "took care of it and said, I quote: '%MESSAGE%.",
+  "What a boy! %USER% is bothered by '%PROBLEM%'. The message I should " +
+  "relay for you: '%MESSAGE%'"
+]
+
 problemMessage = "Houston, we've had a problem."
 recoverMessage = "Problem solved. As you are!"
 
 class MessageCreator
 
-  _createHostStateChangedMessage: (message, notification) ->
-    return "#{message} '#{notification.hostname()}': #{hostStates[notification.hostState()]}"
+  _random: (messages) ->
+    selected = Math.floor(Math.random() * messages.length)
+    return messages[selected]
 
-  _createServiceStateChangedMessage: (message, notification) ->
-    return "#{message} '#{notification.serviceDescription()}' on '#{notification.hostname()}': #{serviceStates[notification.serviceState()]}"
+  _createHostStateChangedMessage: (notification) ->
+    return "'#{notification.hostname()}': #{hostStates[notification.hostState()]}"
+
+  _createServiceStateChangedMessage: (notification) ->
+    return "'#{notification.serviceDescription()}' on '#{notification.hostname()}':" +
+    "#{serviceStates[notification.serviceState()]}"
+
+  _addStateChangedMessage: (messages, notification) ->
+    if notification.isHostNotification()
+      messages.push @_createHostStateChangedMessage(notification)
+      messages.push "#{notification.hostNotesUrl()}"
+    else if notification.isServiceNotification()
+      messages.push @_createServiceStateChangedMessage(notification)
+      messages.push "#{notification.serviceNotesUrl()}"
+    else
+      messages.push "It's not a host and it's also not a service. So, what could it possibly be." +
+      "I really don't know and I have to tell ya' I really don't care!"
 
   messages: (notification) ->
     messages = []
 
     if notification.isProblem()
-      statusMessage = problemMessage
+      messages.push problemMessage
+      @_addStateChangedMessage(messages, notification)
     else if notification.isRecovery()
-      statusMessage = recoverMessage
+      messages.push recoverMessage
+      @_addStateChangedMessage(messages, notification)
+    else if notification.isAcknowledgement()
+      template = @_random(acknowledgeMessages)
+      messages.push template.replace(/%MESSAGE%/, 'message')
+                            .replace(/%USER%/, 'user')
+                            .replace(/%PROBLEM%/, 'problem')
     else
-      statusMessage = 'Unknown Icinga notification type.'
-
-    if notification.isHostNotification()
-      messages.push(@_createHostStateChangedMessage(statusMessage, notification))
-      messages.push("#{notification.hostNotesUrl()}")
-    else
-      messages.push(@_createServiceStateChangedMessage(statusMessage, notification))
-      messages.push("#{notification.serviceNotesUrl()}")
+      messages.push 'Unknown Icinga notification type.'
 
     return messages
 

@@ -83,3 +83,17 @@ describe 'MessageCreator', ->
         @icingaNotification.isServiceNotification = ->
           return true
         expect(@messageCreator.messages(@icingaNotification)).to.match(/service description/)
+
+    describe 'isAcknowledgement', ->
+      beforeEach ->
+        @icingaNotification.isAcknowledgement = ->
+          return true
+
+      it 'message should contains the user who takes care of a problem', ->
+        expect(@messageCreator.messages(@icingaNotification)).to.match(/user/)
+
+      it 'message should contain the problem which is taken care of', ->
+        expect(@messageCreator.messages(@icingaNotification)).to.match(/problem/)
+
+      it 'message should contains the message the user left behind', ->
+        expect(@messageCreator.messages(@icingaNotification)).to.match(/message/)

@@ -34,6 +34,19 @@ describe 'IcingaNotification', ->
 
       expect(new IcingaNotification(icingaData).isProblem()).to.equal(false)
 
+  describe 'isAcknowledgement()', ->
+    it 'returns "true" if the notification type is "ACKNOWLEDGMENT"', ->
+      icingaData =
+        ICINGA_NOTIFICATIONTYPE: 'ACKNOWLEDGEMENT'
+
+      expect(new IcingaNotification(icingaData).isAcknowledgement()).to.equal(true)
+
+    it 'returns "false" if the notification type is not "ACKNOWLEDGEMENT', ->
+      icingaData =
+        ICINGA_NOTIFICATIONTYPE: ''
+
+      expect(new IcingaNotification(icingaData).isAcknowledgement()).to.equal(false)
+
   describe 'isRecovery()', ->
     it 'returns "true" if the notification type is "RECOVERY', ->
       icingaData =
