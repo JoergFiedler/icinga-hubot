@@ -1,7 +1,7 @@
 {
   "name": "icinga-hubot-script",
   "description": "A hubot script that takes notification messages from Icinga and post them to any IRC channel",
-  "version": "0.1.22",
+  "version": "0.1.23",
   "author": "Joerg Fiedler <joerg.fiedler@immobilienscout24.de>",
   "license": "MIT",
   "keywords": [
