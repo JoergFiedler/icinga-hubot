@@ -59,7 +59,7 @@ class MessageCreator
     else if notification.isServiceNotification()
       messages.push @_createServiceStateChangedMessage(notification)
       if isProblem && notification.serviceActionUrl()
-        messages.push encodeURI("#{notification.serviceActionUrl()}&from=-1h&width=1024&height=800")
+        messages.push encodeURI("#{notification.serviceActionUrl()}&from=-36h&width=1024&height=800")
     else
       messages.push "It's not a host and it's also not a service. So, what could it possibly be." +
                     "I really don't know and I have to tell ya' I really don't care!"
